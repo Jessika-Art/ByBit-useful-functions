@@ -160,8 +160,8 @@ def get_opened_positions(SYMBOL):
 
 
 ''' STOP LOSS FOR BUY POSITION '''
-def STOP_IF_LONG(symbol):
-    position = get_opened_positions(symbol)         # check if a position is open
+def STOP_IF_LONG(symbol):                           # Use this function if you aim to set stop loss considering your capital as percentage. For example if I don't want to lose more than 3% of my capital, then this function is ok.
+    position = get_opened_positions(symbol)         # check first if a position is open
     if position[0] == 'long':                       # index [0] refers to "pos" variable inside the "get_opened_positions(symbol)" which could be "long" or "short"
         stop_percent = 0.01                         # will used as 1%
         entry_price = position[5][0]                # get the entry price
@@ -169,13 +169,15 @@ def STOP_IF_LONG(symbol):
         STOP = stop_price
     return round(STOP, 3)                           # IMPORTANT IS TO ROUND THE RETURN PRICE, OTHERWISE WILL NOT WORKS.
 
+# You have to get the entry price first so you can set a stop loss starting from that price.
+# You can delete the percentage calcutation and write another calculation based on your startegy.
+# Same as above the below function for selling position.
 
 ''' STOP LOSS FOR SELL POSITION '''
 def STOP_IF_SHORT(symbol):
     position = get_opened_positions(symbol)
     if position[0] == 'short':
         stop_percent = 0.01
-        # position = get_opened_positions(symbol)
         entry_price = position[5][1]
         stop_price = entry_price*(1+stop_percent)
         STOP = stop_price
